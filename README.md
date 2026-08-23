@@ -127,4 +127,4 @@ Analyse des couts et temps d'arret maintenance.
 ## Auteur
 
 Yassir Bouchnaf Etudient en BUISINESS AND DATA MANAGEMENT
-Projet realise dans le cadre d'un cours Power BI - Juin 2026
+
