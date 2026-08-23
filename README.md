@@ -1,90 +1,115 @@
-📊 Tableau de Bord Industriel - Power BI
+# Tableau de Bord Industriel - Power BI
 
-Un tableau de bord interactif de 4 pages analysant les performances industrielles d'une usine à travers 4 axes : Production, Qualité, Maintenance et Fabrication Mécanique.
+Un tableau de bord interactif de 4 pages analysant les performances industrielles d'une usine a travers 4 axes : Production, Qualite, Maintenance et Fabrication Mecanique.
 
-📁 Structure du projet
-├── DAX/
-│   └── measures_industriel.md       # Toutes les mesures DAX du projet
-├── Screenshots/
-│   ├── page1_vue_ensemble.png
-│   ├── page2_production.png
-│   ├── page3_qualite.png
-│   └── page4_maintenance.png
-├── Projet power bi.pbix             # Fichier Power BI principal
-└── README.md
-📄 Pages du tableau de bord
-1. Vue d'ensemble
+---
 
-Vue globale de la santé de l'usine en un coup d'oeil.
+## Structure du projet
 
-KPI cards : Coût total, TRS/OEE, Taux de défaut, Temps d'arrêt total, Coût Maintenance
-Jauge dynamique : TRS/OEE avec min/max dynamiques (minTRS / maxTRS)
-Graphique en courbes : Evolution des indicateurs clés par mois (Coût total, Temps d'arrêt)
-Formatage conditionnel : Taux de défaut en rouge si supérieur à la cible 2%
-2. Analyse de Production
+DAX/
+    measures_industriel.md
+Screenshots/
+    page1_vue_ensemble.png
+    page2_production.png
+    page3_qualite.png
+    page4_maintenance.png
+Projet power bi.pbix
+README.md
 
-Focus sur l'efficacité et les coûts de production.
+---
 
-KPI cards : Productivité globale, Productivité machine, Productivité moyenne, Disponibilité production
-Graphique combiné : Coût total vs Objectif (barres + ligne de référence)
-Petits multiples : Productivité machine par service (grille comparative)
-Jauge : Disponibilité production
-3. Analyse Qualité
+## Pages du tableau de bord
 
-Page la plus avancée - analyse des causes racines des défauts.
+### 1. Vue d'ensemble
+Vue globale de la sante de l'usine en un coup d'oeil.
+- KPI cards : Cout total, TRS/OEE, Taux de defaut, Temps d'arret total, Cout Maintenance
+- Jauge dynamique : TRS/OEE avec min/max dynamiques (minTRS / maxTRS)
+- Graphique en courbes : Evolution des indicateurs cles par mois
+- Formatage conditionnel : Taux de defaut en rouge si superieur a la cible 2%
 
-KPI cards : Total défauts, Total contrôlé, Coût non qualité, Coût par défaut
-Graphique Pareto : Défauts par type triés par ordre décroissant
-Carte de chaleur (Heatmap) : Matrice Ligne_production x Type de défaut avec formatage conditionnel (blanc vers rouge)
-Treemap : Répartition des défauts par ligne et type (visualisation proportionnelle)
-Graphique à barres : Taux de défaut par ligne de production avec ligne cible CIBLEQ (2%) et coloration conditionnelle
-4. Maintenance & Fabrication Mécanique
+### 2. Analyse de Production
+Focus sur l'efficacite et les couts de production.
+- KPI cards : Productivite globale, Productivite machine, Productivite moyenne, Disponibilite production
+- Graphique combine : Cout total vs Objectif (barres + ligne de reference)
+- Petits multiples : Productivite machine par service (grille comparative)
+- Jauge : Disponibilite production
 
-Analyse des coûts et temps d'arrêt maintenance.
+### 3. Analyse Qualite
+Page la plus avancee - analyse des causes racines des defauts.
+- KPI cards : Total defauts, Total controle, Cout non qualite, Cout par defaut
+- Graphique Pareto : Defauts par type tries par ordre decroissant
+- Carte de chaleur (Heatmap) : Matrice Ligne_production x Type de defaut
+- Treemap : Repartition des defauts par ligne et type
+- Graphique a barres : Taux de defaut par ligne avec ligne cible CIBLEQ (2%)
 
-KPI cards : Coût Maintenance, % Coût maintenance, Taux d'arrêt maintenance, Coût mécanique
-Jauge : Taux d'arrêt maintenance
-Nuage de points : Coût Maintenance vs Temps d'arrêt par service (taille = coût)
-Graphique à barres horizontales : Temps d'arrêt total par service
-📐 Modèle de données
-Table	Description
-fact_industriel	Table de faits principale - couts, heures, temps d'arrêt (100 lignes)
-fact_qualite	Données qualité - défauts, pièces contrôlées, coûts non qualité (100 lignes)
-dim_service	Dimension service - 7 services (Production, Maintenance, Qualité...)
-Dim_date	Dimension date - 2024, janvier à avril
-📏 Mesures DAX principales
-INDICATEURS MAINTENANCE
-Mesure	Formule
-Coût Maintenance	SUM(fact_industriel[cout_maintenance])
-Coût total	SUM(fact_industriel[cout_total])
-% Coût maintenance	DIVIDE([Cout Maintenance], [Cout total], 0)
-Temps d'arrêt total	SUM(fact_industriel[temps_arret])
-Taux d'arrêt maintenance	DIVIDE([Temps d'arret total], SUM(fact_industriel[heures_travail]), 0)
-INDICATEURS PRODUCTION
-Mesure	Formule
-Cout_total	SUM(fact_industriel[cout_total])
-Objectif_Cout	100000
-Taux_Cout	DIVIDE([Cout_total], [Objectif_Cout])
-Disponibilité production	DIVIDE([Temps utile], SUM(fact_industriel[heures_travail]), 0)
-Productivité globale	[Disponibilite production] * DIVIDE([Taux utilisation machine], 100, 0)
-Productivité moyenne	AVERAGE(fact_industriel[taux_utilisation_machine])
-INDICATEURS QUALITE
-Mesure	Formule
-Total défauts	SUM(fact_qualite[nb_defauts])
-Total contrôlé	SUM(fact_qualite[nb_pieces_controlees])
-Taux de défaut	DIVIDE([Total defauts], [Total controle], 0)
-Coût non qualité	SUM(fact_qualite[cout_non_qualite])
-CIBLEQ	0.02
-coleur_tauxDefaut	IF([Taux de defaut] > [CIBLEQ], "RED", "GREEN")
-INDICATEURS FABRICATION MECANIQUE
-Mesure	Formule
-TRS/OEE	Disponibilite x Performance x Qualite
-Coût mécanique	CALCULATE(SUM(fact_industriel[cout_total]), dim_service[service_name] = "Fabrication_mecanique")
-🛠️ Technologies utilisées
-Power BI Desktop
-DAX (Data Analysis Expressions)
-Power Query (M)
-👨‍💻 Auteur
+### 4. Maintenance et Fabrication Mecanique
+Analyse des couts et temps d'arret maintenance.
+- KPI cards : Cout Maintenance, % Cout maintenance, Taux d'arret maintenance, Cout mecanique
+- Jauge : Taux d'arret maintenance
+- Nuage de points : Cout Maintenance vs Temps d'arret par service
+- Graphique a barres horizontales : Temps d'arret total par service
 
-Yassir Bouchnaf
-Projet réalisé dans le cadre d'un cours Power BI - Juin 2026
+---
+
+## Modele de donnees
+
+| Table | Description |
+|---|---|
+| fact_industriel | Table de faits principale - 100 lignes |
+| fact_qualite | Donnees qualite - 100 lignes |
+| dim_service | 7 services |
+| Dim_date | 2024, janvier a avril |
+
+---
+
+## Mesures DAX principales
+
+### INDICATEURS MAINTENANCE
+| Mesure | Formule |
+|---|---|
+| Cout Maintenance | SUM(fact_industriel[cout_maintenance]) |
+| Cout total | SUM(fact_industriel[cout_total]) |
+| % Cout maintenance | DIVIDE([Cout Maintenance], [Cout total], 0) |
+| Temps d'arret total | SUM(fact_industriel[temps_arret]) |
+| Taux d'arret maintenance | DIVIDE([Temps d'arret total], SUM(fact_industriel[heures_travail]), 0) |
+
+### INDICATEURS PRODUCTION
+| Mesure | Formule |
+|---|---|
+| Cout_total | SUM(fact_industriel[cout_total]) |
+| Objectif_Cout | 100000 |
+| Taux_Cout | DIVIDE([Cout_total], [Objectif_Cout]) |
+| Disponibilite production | DIVIDE([Temps utile], SUM(fact_industriel[heures_travail]), 0) |
+| Productivite globale | [Disponibilite production] * DIVIDE([Taux utilisation machine], 100, 0) |
+| Productivite moyenne | AVERAGE(fact_industriel[taux_utilisation_machine]) |
+
+### INDICATEURS QUALITE
+| Mesure | Formule |
+|---|---|
+| Total defauts | SUM(fact_qualite[nb_defauts]) |
+| Total controle | SUM(fact_qualite[nb_pieces_controlees]) |
+| Taux de defaut | DIVIDE([Total defauts], [Total controle], 0) |
+| Cout non qualite | SUM(fact_qualite[cout_non_qualite]) |
+| CIBLEQ | 0.02 |
+| coleur_tauxDefaut | IF([Taux de defaut] > [CIBLEQ], "RED", "GREEN") |
+
+### INDICATEURS FABRICATION MECANIQUE
+| Mesure | Formule |
+|---|---|
+| TRS/OEE | Disponibilite x Performance x Qualite |
+| Cout mecanique | CALCULATE(SUM(fact_industriel[cout_total]), dim_service[service_name] = "Fabrication_mecanique") |
+
+---
+
+## Technologies utilisees
+
+- Power BI Desktop
+- DAX (Data Analysis Expressions)
+- Power Query (M)
+
+---
+
+## Auteur
+
+Yassir Bouchnaf Etudient en BUISINESS AND DATA MANAGEMENT
+Projet realise dans le cadre d'un cours Power BI - Juin 2026
