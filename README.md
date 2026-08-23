@@ -7,14 +7,15 @@ Un tableau de bord interactif de 4 pages analysant les performances industrielle
 ## Structure du projet
 
 DAX/
-    measures_industriel.md
+measures_industriel.md
 Screenshots/
-    page1_vue_ensemble.png
-    page2_production.png
-    page3_qualite.png
-    page4_maintenance.png
+page1_vue_ensemble.png
+page2_production.png
+page3_qualite.png
+page4_maintenance.png
 Projet power bi.pbix
 README.md
+
 
 ---
 
@@ -27,12 +28,20 @@ Vue globale de la sante de l'usine en un coup d'oeil.
 - Graphique en courbes : Evolution des indicateurs cles par mois
 - Formatage conditionnel : Taux de defaut en rouge si superieur a la cible 2%
 
+![Vue d'ensemble](Screenshots/page1_vue_ensemble.png)
+
+---
+
 ### 2. Analyse de Production
 Focus sur l'efficacite et les couts de production.
 - KPI cards : Productivite globale, Productivite machine, Productivite moyenne, Disponibilite production
 - Graphique combine : Cout total vs Objectif (barres + ligne de reference)
 - Petits multiples : Productivite machine par service (grille comparative)
 - Jauge : Disponibilite production
+
+![Production](Screenshots/page2_production.png)
+
+---
 
 ### 3. Analyse Qualite
 Page la plus avancee - analyse des causes racines des defauts.
@@ -42,12 +51,18 @@ Page la plus avancee - analyse des causes racines des defauts.
 - Treemap : Repartition des defauts par ligne et type
 - Graphique a barres : Taux de defaut par ligne avec ligne cible CIBLEQ (2%)
 
+![Qualite](Screenshots/page3_qualite.png)
+
+---
+
 ### 4. Maintenance et Fabrication Mecanique
 Analyse des couts et temps d'arret maintenance.
 - KPI cards : Cout Maintenance, % Cout maintenance, Taux d'arret maintenance, Cout mecanique
 - Jauge : Taux d'arret maintenance
 - Nuage de points : Cout Maintenance vs Temps d'arret par service
 - Graphique a barres horizontales : Temps d'arret total par service
+
+![Maintenance](Screenshots/page4_maintenance.png)
 
 ---
 
